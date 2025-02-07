@@ -1,0 +1,21 @@
+{{ define "main" }}
+<div class="container pt-5" id="list-page">
+    <h2 class="text-center pb-2">{{ .Title }}</h2>
+    <h6 class="text-center">{{ .Params.description | emojify }}</h6>
+    <div class="row p-4">
+        {{ .Content | emojify }}
+    </div>
+    <div class="card-group p-4">
+        <div class="row justify-content-center">
+            {{ $imageFiles := readDir "static/images/gallery" }}
+            {{ range $imageFiles }}
+            <div class="col-md-4 p-4 m-0 rounded-lg">
+                <div class="card p-0 m-0 border-0">
+                    <img class="img-fluid rounded" src="{{ printf "/images/gallery/%s" .Name }}" style="box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);">
+                </div>
+            </div>
+            {{ end }}
+        </div>
+    </div>
+</div>
+{{ end }}

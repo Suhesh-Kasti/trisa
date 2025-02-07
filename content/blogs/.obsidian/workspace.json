@@ -1,0 +1,172 @@
+{
+  "main": {
+    "id": "adbcf92c70abdd4d",
+    "type": "split",
+    "children": [
+      {
+        "id": "23645139b2fa0e80",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "d1269bbaed504bd4",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "quest-to-receptionist.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "906b27dc4ad1846f",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "learning-japanese.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          }
+        ],
+        "currentTab": 1
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "0dee67fc12e0b079",
+    "type": "split",
+    "children": [
+      {
+        "id": "ea8e49db8b723e89",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "39932447f165b75f",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "52f754b54f271d5c",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "5d5660610eb0d87c",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "639779096626e7b3",
+    "type": "split",
+    "children": [
+      {
+        "id": "90db5152322dc014",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "9d8066d08ef0998d",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "learning-japanese.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "d6c9337867beff1f",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "learning-japanese.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "fc516703877efc67",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              }
+            }
+          },
+          {
+            "id": "8a3c76dba76759fd",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "learning-japanese.md"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "obsidian-excalidraw-plugin:Create new drawing": false
+    }
+  },
+  "active": "906b27dc4ad1846f",
+  "lastOpenFiles": [
+    "japanese-class-1.md",
+    "learning-japanese.md",
+    "quest-to-receptionist.md",
+    "l",
+    "web-dev-dream.md",
+    "cafe-cashier-tales.md"
+  ]
+}

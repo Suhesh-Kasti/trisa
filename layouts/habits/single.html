@@ -1,0 +1,269 @@
+{{ define "head" }}
+<meta name="description" content="Personal Habit Tracker with Rewards">
+<link rel="stylesheet" href="{{ .Site.Params.staticPath }}/css/single.css">
+<link rel="stylesheet" href="{{ .Site.Params.staticPath }}/css/habit-tracker.css">
+<script defer src="{{ .Site.Params.staticPath }}/fontawesome-5/all-5.15.4.js"></script>
+{{ end }}
+
+{{ define "title" }}
+Habit Tracker | {{ .Site.Title }}
+{{ end }}
+
+{{ define "main" }}
+<section id="habit-tracker">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-sm-12 col-md-12 col-lg-9">
+        <!-- User Profile Section -->
+        <div class="user-profile mb-4">
+          <div id="walletSection" class="card">
+            <div class="card-body">
+              <h3>Your Profile</h3>
+              <div id="connectWallet" class="mb-3">
+                <input type="text" id="userName" class="form-control mb-2" placeholder="Enter your name">
+                <input type="text" id="walletAddress" class="form-control mb-2" placeholder="Your Solana wallet address">
+                <button onclick="saveUserProfile()" class="btn btn-primary">Save Profile</button>
+              </div>
+              <div id="walletInfo" style="display: none;">
+                <p>Welcome, <span id="userNameDisplay"></span></p>
+                <p>Wallet: <span id="walletAddressDisplay"></span></p>
+                <p>TRISA Balance: <span id="tokenBalance">0</span></p>
+              </div>
+            </div>
+          </div>
+        </div>
+          <div class="habits-container">
+            <div class="add-habit-section mb-4">
+              <input type="text" id="newHabitInput" class="form-control" placeholder="Enter new habit">
+              <button onclick="addHabit()" class="btn btn-primary mt-2">Add Habit</button>
+            </div>
+
+            <div id="habitsList" class="habits-list">
+              <!-- Habits will be inserted here dynamically -->
+            </div>
+          </div>
+
+          <div class="stats-section mt-4">
+            <h3>Progress Overview</h3>
+            <div class="progress-cards">
+              <div class="stat-card">
+                <i class="fas fa-check-circle"></i>
+                <span id="completedToday">0</span>
+                <p>Completed Today</p>
+              </div>
+              <div class="stat-card">
+                <i class="fas fa-calendar-check"></i>
+                <span id="streak">0</span>
+                <p>Day Streak</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-12 col-md-12 col-lg-3">
+        <div id="stickySideBar" class="sticky-sidebar">
+          <aside class="toc">
+            <h5>Milestone Achievements</h5>
+            <div class="toc-content achievements-list">
+              <div id="achievementsList">
+                <!-- Achievement items will be populated here -->
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+</section>
+
+<script>
+const API_URL = '{{ .Site.Params.habitTracker.apiEndpoint }}';
+let habits = [];
+let achievements = [
+  { name: 'Getting Started', description: 'Complete your first habit', icon: '🌟', unlocked: false },
+  { name: 'Consistent', description: '3-day streak', icon: '🔥', unlocked: false },
+  { name: 'Determined', description: '7-day streak', icon: '💪', unlocked: false }
+];
+
+// Load saved habits and achievements from localStorage
+function loadSavedData() {
+  const savedHabits = localStorage.getItem('habits');
+  if (savedHabits) {
+    habits = JSON.parse(savedHabits);
+    renderHabits();
+  }
+  renderAchievements();
+}
+
+function renderAchievements() {
+  const achievementsList = document.getElementById('achievementsList');
+  achievementsList.innerHTML = achievements.map(achievement => `
+    <div class="achievement-item ${achievement.unlocked ? 'unlocked' : 'locked'}">
+      <span class="achievement-icon">${achievement.icon}</span>
+      <div class="achievement-details">
+        <strong>${achievement.name}</strong>
+        <small>${achievement.description}</small>
+      </div>
+    </div>
+  `).join('');
+}
+
+async function addHabit() {
+  const input = document.getElementById('newHabitInput');
+  const habitName = input.value.trim();
+  if (habitName) {
+    const habit = {
+      id: Date.now().toString(),
+      name: habitName,
+      completed: false,
+      lastCompleted: null
+    };
+    habits.push(habit);
+    localStorage.setItem('habits', JSON.stringify(habits));
+    renderHabits();
+    input.value = '';
+  }
+}
+
+function renderHabits() {
+  const habitsList = document.getElementById('habitsList');
+  habitsList.innerHTML = habits.map(habit => `
+    <div class="habit-item ${habit.completed ? 'completed' : ''}">
+      <div class="habit-content">
+        <span class="habit-name">${habit.name}</span>
+        <button onclick="completeHabit('${habit.id}')" class="btn btn-success btn-sm" ${habit.completed ? 'disabled' : ''}>
+          ${habit.completed ? '<i class="fas fa-check-circle"></i> Done' : '<i class="fas fa-check"></i> Complete'}
+        </button>
+      </div>
+    </div>
+  `).join('');
+  updateStats();
+}
+
+async function completeHabit(habitId) {
+  try {
+    const response = await fetch(`${API_URL}/api/complete-habit`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        userId: localStorage.getItem('userId') || 'default-user',
+        habitId: habitId
+      })
+    });
+    
+    const data = await response.json();
+    if (data.success) {
+      const habit = habits.find(h => h.id === habitId);
+      if (habit) {
+        habit.completed = true;
+        habit.lastCompleted = new Date().toISOString();
+        localStorage.setItem('habits', JSON.stringify(habits));
+        updateTokenBalance();
+        renderHabits();
+        checkAchievements();
+      }
+    }
+  } catch (error) {
+    console.error('Error completing habit:', error);
+  }
+}
+
+function updateStats() {
+  const completedToday = habits.filter(h => h.completed).length;
+  document.getElementById('completedToday').textContent = completedToday;
+  
+  // Calculate streak
+  const streak = calculateStreak();
+  document.getElementById('streak').textContent = streak;
+}
+
+function calculateStreak() {
+  // Implementation of streak calculation
+  return habits.filter(h => h.completed).length > 0 ? 1 : 0;
+}
+
+function checkAchievements() {
+  const completedCount = habits.filter(h => h.completed).length;
+  if (completedCount >= 1 && !achievements[0].unlocked) {
+    achievements[0].unlocked = true;
+  }
+  // Add more achievement checks here
+  renderAchievements();
+}
+
+async function updateTokenBalance() {
+  const balanceElement = document.getElementById('balance');
+  balanceElement.textContent = parseInt(balanceElement.textContent) + 10;
+}
+
+async function saveUserProfile() {
+  const userName = document.getElementById('userName').value.trim();
+  const walletAddress = document.getElementById('walletAddress').value.trim();
+  
+  if (!userName || !walletAddress) {
+    alert('Please enter both your name and wallet address');
+    return;
+  }
+
+  // Save to localStorage
+  localStorage.setItem('habitTrackerUser', JSON.stringify({
+    name: userName,
+    walletAddress: walletAddress
+  }));
+
+  // Update UI
+  document.getElementById('userNameDisplay').textContent = userName;
+  document.getElementById('walletAddressDisplay').textContent = walletAddress;
+  document.getElementById('connectWallet').style.display = 'none';
+  document.getElementById('walletInfo').style.display = 'block';
+}
+
+// Modified completeHabit function
+async function completeHabit(habitId) {
+  const userData = JSON.parse(localStorage.getItem('habitTrackerUser'));
+  if (!userData || !userData.walletAddress) {
+    alert('Please set up your profile first');
+    return;
+  }
+
+  try {
+    const response = await fetch(`${API_URL}/api/complete-habit`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        userName: userData.name,
+        walletAddress: userData.walletAddress,
+        habitId: habitId
+      })
+    });
+    
+    const data = await response.json();
+    if (data.success) {
+      // Update token balance display
+      document.getElementById('tokenBalance').textContent = data.balance;
+      // Update habit completion status
+      updateHabitStatus(habitId);
+    }
+  } catch (error) {
+    console.error('Error completing habit:', error);
+  }
+}
+
+// Load user profile on page load
+document.addEventListener('DOMContentLoaded', () => {
+  const userData = JSON.parse(localStorage.getItem('habitTrackerUser'));
+  if (userData) {
+    document.getElementById('userNameDisplay').textContent = userData.name;
+    document.getElementById('walletAddressDisplay').textContent = userData.walletAddress;
+    document.getElementById('connectWallet').style.display = 'none';
+    document.getElementById('walletInfo').style.display = 'block';
+  }
+});
+
+// Initialize the page
+document.addEventListener('DOMContentLoaded', loadSavedData);
+</script>
+{{ end }}
