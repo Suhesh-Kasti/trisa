@@ -53,6 +53,12 @@ Menus:
       weight: 1
       parent: fun
       url: /habits
+    - identifier: exercise
+      name: Exercices
+      title: Let's Exercise Together
+      weight: 2
+      parent: fun
+      url: /exercises/
     - identifier: gallery
       name: Gallery
       title: My gallery

@@ -1,0 +1,121 @@
+/* Exercise cards */
+.exercise-container .card {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  border-color: var(--text-secondary-color);
+  transition: transform 0.3s ease;
+}
+
+.exercise-container .card:hover {
+  transform: translateY(-5px);
+}
+
+.exercise-container .card-header {
+  background-color: var(--secondary-background-color);
+  border-bottom-color: var(--text-secondary-color);
+}
+
+/* Day filter buttons */
+.day-filters .btn-outline-primary {
+  color: var(--primary-color);
+  border-color: var(--primary-color);
+  margin: 0 2px;
+}
+
+.day-filters .btn-outline-primary:hover,
+.day-filters .btn-outline-primary.active {
+  background-color: var(--primary-color);
+  color: var(--background-color);
+}
+
+/* Badge colors */
+.badge.bg-primary {
+  background-color: var(--primary-color) !important;
+  color: var(--background-color) !important;
+}
+
+.badge.bg-secondary {
+  background-color: var(--primary-color) !important;
+  color: var(--background-color) !important;
+}
+
+/* Form elements */
+select.form-select {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  border-color: var(--text-secondary-color);
+}
+
+select.form-select option {
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+/* Timer elements */
+.timer-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.timer-display {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.timer-display.completed {
+  color: #28a745;
+}
+
+.card-img-top {
+  height: 200px;
+  object-fit: cover;
+}
+
+/* Duration controls */
+.duration-controls {
+  margin-top: 1rem;
+}
+
+.duration-controls .form-range::-webkit-slider-thumb {
+  background: var(--primary-color);
+}
+
+.duration-controls .form-range::-moz-range-thumb {
+  background: var(--primary-color);
+}
+
+.duration-controls .form-range::-ms-thumb {
+  background: var(--primary-color);
+}
+
+.duration-controls .form-label {
+  font-size: 0.9rem;
+  color: var(--text-secondary-color);
+}
+
+.duration-controls .text-muted {
+  color: var(--text-secondary-color) !important;
+  font-size: 0.8rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .day-filters {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 5px;
+  }
+  
+  .day-filters .btn {
+    margin: 0;
+  }
+}

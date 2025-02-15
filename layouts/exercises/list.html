@@ -1,0 +1,91 @@
+{{ define "main" }}
+<div class="container py-5">
+  <h1 class="text-center mb-5">Let's Workout Together</h1>
+  
+  <!-- User Selection -->
+  <div class="text-center mb-4">
+    <label for="user-select" class="form-label">Select Gender:</label>
+    <select id="user-select" class="form-select form-select-lg mx-auto" style="max-width: 200px;">
+      <option value="both">Both</option>
+      <option value="boy">Boy</option>
+      <option value="girl">Girl</option>
+    </select>
+  </div>
+  
+  <!-- Day Selection Buttons -->
+  <div class="text-center mb-5">
+    <div class="btn-group day-filters" role="group" aria-label="Day filters">
+      <button type="button" class="btn btn-outline-primary active" data-day="all">All Days</button>
+      <button type="button" class="btn btn-outline-primary" data-day="Sunday">Sun</button>
+      <button type="button" class="btn btn-outline-primary" data-day="Monday">Mon</button>
+      <button type="button" class="btn btn-outline-primary" data-day="Tuesday">Tue</button>
+      <button type="button" class="btn btn-outline-primary" data-day="Wednesday">Wed</button>
+      <button type="button" class="btn btn-outline-primary" data-day="Thursday">Thu</button>
+      <button type="button" class="btn btn-outline-primary" data-day="Friday">Fri</button>
+      <button type="button" class="btn btn-outline-primary" data-day="Saturday">Sat</button>
+    </div>
+  </div>
+  
+  <!-- Exercise Cards -->
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 exercise-container">
+    {{ range .Pages }}
+    <div class="col exercise-card" 
+         data-days='{{ jsonify .Params.days }}' 
+         data-users='{{ jsonify .Params.users }}'>
+      <div class="card h-100 shadow-sm">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5 class="card-title mb-0">{{ .Title }}</h5>
+          <span class="badge bg-primary default-duration" data-default-duration="{{ .Params.duration }}">{{ .Params.duration }}s</span>
+        </div>
+        <div class="position-relative">
+          <img src="{{ .Params.image }}" class="card-img-top" alt="{{ .Title }}">
+          <div class="timer-overlay d-none">
+            <div class="timer-display">00:00</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-text">{{ .Content }}</p>
+          <div class="duration-controls mb-3">
+            <div class="d-flex justify-content-between align-items-center">
+              <label for="duration-{{ .File.UniqueID }}" class="form-label mb-1">Duration (seconds):</label>
+              <button class="btn btn-sm btn-link reset-duration-btn p-0" 
+                      data-default-duration="{{ .Params.duration }}" 
+                      data-slider-id="duration-{{ .File.UniqueID }}">
+                Reset
+              </button>
+            </div>
+            <input type="range" class="form-range duration-slider" 
+                  id="duration-{{ .File.UniqueID }}" 
+                  min="5" max="120" step="5" 
+                  value="{{ .Params.duration }}"
+                  data-duration-badge=".badge.bg-primary">
+            <div class="d-flex justify-content-between text-muted small">
+              <span>5s</span>
+              <span>60s</span>
+              <span>120s</span>
+            </div>
+          </div>
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex">
+              {{ range .Params.days }}
+              <span class="badge bg-secondary me-1">{{ . }}</span>
+              {{ end }}
+            </div>
+            <div>
+              <button class="btn btn-sm btn-success start-timer-btn">Start</button>
+              <button class="btn btn-sm btn-danger reset-timer-btn d-none">Reset</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {{ end }}
+  </div>
+</div>
+
+<!-- Link to the CSS file -->
+<link rel="stylesheet" href="/css/exercises.css">
+
+<!-- Link to the JS file -->
+<script src="/js/exercises.js"></script>
+{{ end }}
